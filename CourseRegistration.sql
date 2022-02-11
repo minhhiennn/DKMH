@@ -3,8 +3,8 @@ go
 use Course_Registration
 set dateformat DMY
 go
-select * from password_reset_token;
-select * from USER_KIND;
+--select * from password_reset_token;
+--select * from USER_KIND;
 -- User_Kind là bảng nhận dạng(quy ước) về user thôi
 -- VD : bảng Student(Sinh Viên) mình quy ước ID_User_Kind là 1
 --      bảng Professor(Giảng Viên) mình quy ước ID_User_Kind là 2
@@ -303,7 +303,7 @@ Primary key (ID_Semester,ID_Student)
 insert into USERS Values(N'18130005','st',N'18130005@st.hcmuaf.edu.vn',N'123456')
 insert into USERS Values(N'18130077','st',N'18130077@st.hcmuaf.edu.vn',N'123456')
 insert into USERS Values(N'18130001','st',N'18130001@st.hcmuaf.edu.vn',N'123456')
-insert into USERS Values(N'18130002','st',N'18130002@st.hcmuaf.edu.vn',N'123456')
+insert into USERS Values(N'18130002','st',N'18130002@st.hcmuaf.edu.vn',N'123456')	
 insert into USERS Values(N'18130003','st',N'18130003@st.hcmuaf.edu.vn',N'123456')
 insert into USERS Values(N'18130004','st',N'18130004@st.hcmuaf.edu.vn',N'123456')
 insert into USERS Values(N'18130006','st',N'18130006@st.hcmuaf.edu.vn',N'123456')

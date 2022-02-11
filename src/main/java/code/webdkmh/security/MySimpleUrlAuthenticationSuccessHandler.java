@@ -30,7 +30,7 @@ public class MySimpleUrlAuthenticationSuccessHandler implements AuthenticationSu
             HttpServletRequest request,
             HttpServletResponse response,
             Authentication authentication
-    ) throws IOException {
+    ) throws IOException {  
 
         String targetUrl = determineTargetUrl(authentication);
 
