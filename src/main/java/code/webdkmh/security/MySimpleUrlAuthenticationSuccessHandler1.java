@@ -17,7 +17,6 @@ public class MySimpleUrlAuthenticationSuccessHandler1 extends LoginFailuresClear
 
     public MySimpleUrlAuthenticationSuccessHandler1(LoginFailuresManager failuresManager) {
         super(failuresManager);
-        System.out.println("okok");
     }
 
     @Override

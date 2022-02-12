@@ -6,7 +6,13 @@ package code.webdkmh.dao.entities;
 
 import java.io.Serializable;
 import java.util.Date;
-import javax.persistence.*;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
+import javax.persistence.Table;
 
 /**
  * JPA entity class for "UserDetail"
@@ -15,79 +21,81 @@ import javax.persistence.*;
  *
  */
 @Entity
-@Table(name="user_detail", schema="dbo", catalog="Course_Registration" )
+@Table(name = "user_detail", schema = "dbo", catalog = "Course_Registration")
 public class UserDetail implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    //--- ENTITY PRIMARY KEY 
+    // --- ENTITY PRIMARY KEY
     @Id
-    @Column(name="ID_User", nullable=false, length=50)
-    private String     idUser ;
+    @Column(name = "ID_User", nullable = false, length = 50)
+    private String idUser;
 
-    //--- ENTITY DATA FIELDS 
-    @Column(name="address", nullable=false, length=50)
-    private String     address ;
+    // --- ENTITY DATA FIELDS
+    @Column(name = "address", nullable = false, length = 50)
+    private String address;
 
-    @Column(name="phone_number", nullable=false, length=10)
-    private String     phoneNumber ;
+    @Column(name = "phone_number", nullable = false, length = 10)
+    private String phoneNumber;
 
-    @Temporal(TemporalType.TIMESTAMP)
-    @Column(name="birthday", nullable=false)
-    private Date       birthday ;
+    // @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "birthday", nullable = false)
+    private Date birthday;
 
-
-    //--- ENTITY LINKS ( RELATIONSHIP )
+    // --- ENTITY LINKS ( RELATIONSHIP )
     @OneToOne
-    @JoinColumn(name="ID_User", referencedColumnName="ID_User", insertable=false, updatable=false)
-    private Users      users ; 
-
+    @JoinColumn(name = "ID_User", referencedColumnName = "ID_User", insertable = false, updatable = false)
+    private Users users;
 
     /**
      * Constructor
      */
     public UserDetail() {
-		super();
+        super();
     }
-    
-    //--- GETTERS & SETTERS FOR FIELDS
-    public void setIdUser( String idUser ) {
-        this.idUser = idUser ;
+
+    // --- GETTERS & SETTERS FOR FIELDS
+    public void setIdUser(String idUser) {
+        this.idUser = idUser;
     }
+
     public String getIdUser() {
         return this.idUser;
     }
 
-    public void setAddress( String address ) {
-        this.address = address ;
+    public void setAddress(String address) {
+        this.address = address;
     }
+
     public String getAddress() {
         return this.address;
     }
 
-    public void setPhoneNumber( String phoneNumber ) {
-        this.phoneNumber = phoneNumber ;
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
     }
+
     public String getPhoneNumber() {
         return this.phoneNumber;
     }
 
-    public void setBirthday( Date birthday ) {
-        this.birthday = birthday ;
+    public void setBirthday(Date birthday) {
+        this.birthday = birthday;
     }
+
     public Date getBirthday() {
         return this.birthday;
     }
 
-    //--- GETTERS FOR LINKS
+    // --- GETTERS FOR LINKS
     public Users getUsers() {
         return this.users;
-    } 
+    }
 
-    //--- toString specific method
-	@Override
-    public String toString() { 
-        StringBuilder sb = new StringBuilder(); 
+    // --- toString specific method
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
         sb.append(idUser);
         sb.append("|");
         sb.append(address);
@@ -95,7 +103,7 @@ public class UserDetail implements Serializable {
         sb.append(phoneNumber);
         sb.append("|");
         sb.append(birthday);
-        return sb.toString(); 
-    } 
+        return sb.toString();
+    }
 
 }

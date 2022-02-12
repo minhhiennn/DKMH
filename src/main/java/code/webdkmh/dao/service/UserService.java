@@ -1,8 +1,8 @@
 package code.webdkmh.dao.service;
 
-import code.webdkmh.dao.entity.User;
-import code.webdkmh.dao.repository.PasswordResetTokenRepository;
-import code.webdkmh.dao.repository.UserRepository;
+import code.webdkmh.dao.entities.Users;
+import code.webdkmh.dao.repositories.PasswordResetTokenRepository;
+import code.webdkmh.dao.repositories.UsersRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -14,23 +14,23 @@ import java.util.Optional;
 public class UserService {
 
     @Autowired
-    private UserRepository userRepository;
+    private UsersRepository userRepository;
 
     @Autowired
     private PasswordResetTokenRepository passwordResetTokenRepository;
 
     private PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
-    public User findById(String id) {
+    public Users findById(String id) {
         return userRepository.findById(id).get();
     }
 
-    public Optional<User> getUserByPasswordResetToken(String token) {
-        String userID = passwordResetTokenRepository.findByToken(token).getId();
+    public Optional<Users> getUserByPasswordResetToken(String token) {
+        String userID = passwordResetTokenRepository.findByToken(token).getIdUser();
         return userRepository.findById(userID);
     }
 
-    public void changeUserPassword(User user, String password) {
+    public void changeUserPassword(Users user, String password) {
         user.setPassword(passwordEncoder.encode(password));
         userRepository.save(user);
     }

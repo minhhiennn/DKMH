@@ -1,7 +1,7 @@
 package code.webdkmh.controllers;
 
-import code.webdkmh.dao.entity.PasswordResetToken;
-import code.webdkmh.dao.entity.User;
+import code.webdkmh.dao.entities.PasswordResetToken;
+import code.webdkmh.dao.entities.Users;
 import code.webdkmh.dao.service.PasswordResetTokenService;
 import code.webdkmh.dao.service.SecurityService;
 import code.webdkmh.dao.service.UserService;
@@ -24,6 +24,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.io.UnsupportedEncodingException;
 import java.time.Instant;
+import java.util.Date;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -81,14 +82,14 @@ public class StudentController {
     @ResponseBody
     public String resetPassword(HttpServletRequest request,
                                 @RequestParam("idUser") String idUser) throws MessagingException, UnsupportedEncodingException {
-        User user = userService.findById(idUser);
+        Users user = userService.findById(idUser);
         String userEmail = user.getEmail();
         String siteUrl = request.getRequestURL().toString().replace(request.getServletPath(), "");
         PasswordResetToken passwordResetToken = new PasswordResetToken();
-        passwordResetToken.setId(idUser);
+        passwordResetToken.setIdUser(idUser);
         String token = UUID.randomUUID().toString();
         passwordResetToken.setToken(token);
-        passwordResetToken.setExpiryDate(Instant.now());
+        passwordResetToken.setExpiryDate(new Date());
         System.out.println(passwordResetToken);
         passwordResetTokenService.save(passwordResetToken);
         this.sendEmailForgetPassword(userEmail, token, siteUrl);
@@ -98,11 +99,11 @@ public class StudentController {
     @RequestMapping(value = "/changePassword")
     @ResponseBody
     public String changePassword(Model model, @RequestParam("token") String token) {
-        String result = securityService.validatePasswordResetToken(token);
+        String result = securityService.valiDatePasswordResetToken(token);
         if (result != null) {
             return result;
         } else {
-            Optional<User> user = userService.getUserByPasswordResetToken(token);
+            Optional<Users> user = userService.getUserByPasswordResetToken(token);
             if (user.isPresent()) {
                 RandomStringGenerator generator = new RandomStringGenerator.Builder()
                         .withinRange('0', 'z')

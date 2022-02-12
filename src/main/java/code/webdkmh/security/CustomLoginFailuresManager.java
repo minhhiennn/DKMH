@@ -24,18 +24,15 @@ public class CustomLoginFailuresManager extends LoginFailuresManager {
     public CustomLoginFailuresManager(RecaptchaProperties recaptcha) {
 
         super(recaptcha);
-        System.out.println("vao duoc roi");
     }
 
     @Override
     public void addLoginFailure(HttpServletRequest arg0) {
-        System.out.println("ok1");
         errorcount++;
     }
 
     @Override
     public void clearLoginFailures(HttpServletRequest arg0) {
-        System.out.println("ok2");
         errorcount++;
     }
 
@@ -43,9 +40,7 @@ public class CustomLoginFailuresManager extends LoginFailuresManager {
     public int getLoginFailuresCount(HttpServletRequest arg0) {
         ValidationResult result = recaptchaValidator.validate(arg0);
         if (result.isSuccess()) {
-            System.out.println("ok");
         } else {
-            System.out.println("No Ok");
         }
 
         return 1;

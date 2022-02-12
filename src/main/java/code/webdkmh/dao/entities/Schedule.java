@@ -7,7 +7,16 @@ package code.webdkmh.dao.entities;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
-import javax.persistence.*;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 /**
  * JPA entity class for "Schedule"
@@ -16,169 +25,177 @@ import javax.persistence.*;
  *
  */
 @Entity
-@Table(name="Schedule", schema="dbo", catalog="Course_Registration" )
+@Table(name = "Schedule", schema = "dbo", catalog = "Course_Registration")
 public class Schedule implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    //--- ENTITY PRIMARY KEY 
+    // --- ENTITY PRIMARY KEY
     @Id
-    @Column(name="ID_Schedule", nullable=false, length=50)
-    private String     idSchedule ;
+    @Column(name = "ID_Schedule", nullable = false, length = 50)
+    private String idSchedule;
 
-    //--- ENTITY DATA FIELDS 
-    @Column(name="ID_Course_Offering", nullable=false, length=50)
-    private String     idCourseOffering ;
+    // --- ENTITY DATA FIELDS
+    @Column(name = "ID_Course_Offering", nullable = false, length = 50)
+    private String idCourseOffering;
 
-    @Column(name="Id_Profeesor", length=50)
-    private String     idProfeesor ;
+    @Column(name = "Id_Profeesor", length = 50)
+    private String idProfeesor;
 
-    @Column(name="Theoretical", nullable=false, length=2)
-    private String     theoretical ;
+    @Column(name = "Theoretical", nullable = false, length = 2)
+    private String theoretical;
 
-    @Column(name="Teaching_Day", nullable=false)
-    private Short      teachingDay ;
-
-    @Temporal(TemporalType.DATE)
-    @Column(name="Start_Day", nullable=false)
-    private Date       startDay ;
+    @Column(name = "Teaching_Day", nullable = false)
+    private Short teachingDay;
 
     @Temporal(TemporalType.DATE)
-    @Column(name="End_Day", nullable=false)
-    private Date       endDay ;
+    @Column(name = "Start_Day", nullable = false)
+    private Date startDay;
 
-    @Column(name="Study_place", nullable=false, length=50)
-    private String     studyPlace ;
+    @Temporal(TemporalType.DATE)
+    @Column(name = "End_Day", nullable = false)
+    private Date endDay;
 
-    @Column(name="Start_Slot", nullable=false)
-    private Byte       startSlot ;
+    @Column(name = "Study_place", nullable = false, length = 50)
+    private String studyPlace;
 
-    @Column(name="End_Slot", nullable=false)
-    private Byte       endSlot ;
+    @Column(name = "Start_Slot", nullable = false)
+    private Byte startSlot;
 
+    @Column(name = "End_Slot", nullable = false)
+    private Byte endSlot;
 
-    //--- ENTITY LINKS ( RELATIONSHIP )
-    @OneToMany(mappedBy="schedule")
-    private List<ProfessorSchedule> listOfProfessorSchedule ; 
+    // --- ENTITY LINKS ( RELATIONSHIP )
+    @OneToMany(mappedBy = "schedule")
+    private List<ProfessorSchedule> listOfProfessorSchedule;
 
     @ManyToOne
-    @JoinColumn(name="ID_Course_Offering", referencedColumnName="ID_Course_Offering", insertable=false, updatable=false)
-    private CourseOffering courseOffering ; 
+    @JoinColumn(name = "ID_Course_Offering", referencedColumnName = "ID_Course_Offering", insertable = false, updatable = false)
+    private CourseOffering courseOffering;
 
     @ManyToOne
-    @JoinColumn(name="Id_Profeesor", referencedColumnName="ID_Professor", insertable=false, updatable=false)
-    private Professor  professor ; 
+    @JoinColumn(name = "Id_Profeesor", referencedColumnName = "ID_Professor", insertable = false, updatable = false)
+    private Professor professor;
 
-    @OneToMany(mappedBy="schedule")
-    private List<StudentSchedule> listOfStudentSchedule ; 
+    @OneToMany(mappedBy = "schedule")
+    private List<StudentSchedule> listOfStudentSchedule;
 
-    @OneToMany(mappedBy="schedule")
-    private List<StudentScheduleR> listOfStudentScheduleR ; 
-
+    @OneToMany(mappedBy = "schedule")
+    private List<StudentScheduleR> listOfStudentScheduleR;
 
     /**
      * Constructor
      */
     public Schedule() {
-		super();
+        super();
     }
-    
-    //--- GETTERS & SETTERS FOR FIELDS
-    public void setIdSchedule( String idSchedule ) {
-        this.idSchedule = idSchedule ;
+
+    // --- GETTERS & SETTERS FOR FIELDS
+    public void setIdSchedule(String idSchedule) {
+        this.idSchedule = idSchedule;
     }
+
     public String getIdSchedule() {
         return this.idSchedule;
     }
 
-    public void setIdCourseOffering( String idCourseOffering ) {
-        this.idCourseOffering = idCourseOffering ;
+    public void setIdCourseOffering(String idCourseOffering) {
+        this.idCourseOffering = idCourseOffering;
     }
+
     public String getIdCourseOffering() {
         return this.idCourseOffering;
     }
 
-    public void setIdProfeesor( String idProfeesor ) {
-        this.idProfeesor = idProfeesor ;
+    public void setIdProfeesor(String idProfeesor) {
+        this.idProfeesor = idProfeesor;
     }
+
     public String getIdProfeesor() {
         return this.idProfeesor;
     }
 
-    public void setTheoretical( String theoretical ) {
-        this.theoretical = theoretical ;
+    public void setTheoretical(String theoretical) {
+        this.theoretical = theoretical;
     }
+
     public String getTheoretical() {
         return this.theoretical;
     }
 
-    public void setTeachingDay( Short teachingDay ) {
-        this.teachingDay = teachingDay ;
+    public void setTeachingDay(Short teachingDay) {
+        this.teachingDay = teachingDay;
     }
+
     public Short getTeachingDay() {
         return this.teachingDay;
     }
 
-    public void setStartDay( Date startDay ) {
-        this.startDay = startDay ;
+    public void setStartDay(Date startDay) {
+        this.startDay = startDay;
     }
+
     public Date getStartDay() {
         return this.startDay;
     }
 
-    public void setEndDay( Date endDay ) {
-        this.endDay = endDay ;
+    public void setEndDay(Date endDay) {
+        this.endDay = endDay;
     }
+
     public Date getEndDay() {
         return this.endDay;
     }
 
-    public void setStudyPlace( String studyPlace ) {
-        this.studyPlace = studyPlace ;
+    public void setStudyPlace(String studyPlace) {
+        this.studyPlace = studyPlace;
     }
+
     public String getStudyPlace() {
         return this.studyPlace;
     }
 
-    public void setStartSlot( Byte startSlot ) {
-        this.startSlot = startSlot ;
+    public void setStartSlot(Byte startSlot) {
+        this.startSlot = startSlot;
     }
+
     public Byte getStartSlot() {
         return this.startSlot;
     }
 
-    public void setEndSlot( Byte endSlot ) {
-        this.endSlot = endSlot ;
+    public void setEndSlot(Byte endSlot) {
+        this.endSlot = endSlot;
     }
+
     public Byte getEndSlot() {
         return this.endSlot;
     }
 
-    //--- GETTERS FOR LINKS
+    // --- GETTERS FOR LINKS
     public List<ProfessorSchedule> getListOfProfessorSchedule() {
         return this.listOfProfessorSchedule;
-    } 
+    }
 
     public CourseOffering getCourseOffering() {
         return this.courseOffering;
-    } 
+    }
 
     public Professor getProfessor() {
         return this.professor;
-    } 
+    }
 
     public List<StudentSchedule> getListOfStudentSchedule() {
         return this.listOfStudentSchedule;
-    } 
+    }
 
     public List<StudentScheduleR> getListOfStudentScheduleR() {
         return this.listOfStudentScheduleR;
-    } 
+    }
 
-    //--- toString specific method
-	@Override
-    public String toString() { 
-        StringBuilder sb = new StringBuilder(); 
+    // --- toString specific method
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
         sb.append(idSchedule);
         sb.append("|");
         sb.append(idCourseOffering);
@@ -198,7 +215,7 @@ public class Schedule implements Serializable {
         sb.append(startSlot);
         sb.append("|");
         sb.append(endSlot);
-        return sb.toString(); 
-    } 
+        return sb.toString();
+    }
 
 }

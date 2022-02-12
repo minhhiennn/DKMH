@@ -6,7 +6,13 @@ package code.webdkmh.dao.entities;
 
 import java.io.Serializable;
 import java.util.Date;
-import javax.persistence.*;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
+import javax.persistence.Table;
 
 /**
  * JPA entity class for "PasswordResetToken"
@@ -15,75 +21,76 @@ import javax.persistence.*;
  *
  */
 @Entity
-@Table(name="password_reset_token", schema="dbo", catalog="Course_Registration" )
+@Table(name = "password_reset_token", schema = "dbo", catalog = "Course_Registration")
 public class PasswordResetToken implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    //--- ENTITY PRIMARY KEY 
+    // --- ENTITY PRIMARY KEY
     @Id
-    @Column(name="ID_User", nullable=false, length=50)
-    private String     idUser ;
+    @Column(name = "ID_User", nullable = false, length = 50)
+    private String idUser;
 
-    //--- ENTITY DATA FIELDS 
-    @Column(name="token", nullable=false, length=50)
-    private String     token ;
+    // --- ENTITY DATA FIELDS
+    @Column(name = "token", nullable = false, length = 50)
+    private String token;
 
-    @Temporal(TemporalType.TIMESTAMP)
-    @Column(name="expiry_Date", nullable=false)
-    private Date       expiryDate ;
+    // @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "expiry_Date", nullable = false)
+    private Date expiryDate;
 
-
-    //--- ENTITY LINKS ( RELATIONSHIP )
+    // --- ENTITY LINKS ( RELATIONSHIP )
     @OneToOne
-    @JoinColumn(name="ID_User", referencedColumnName="ID_User", insertable=false, updatable=false)
-    private Users      users ; 
-
+    @JoinColumn(name = "ID_User", referencedColumnName = "ID_User", insertable = false, updatable = false)
+    private Users users;
 
     /**
      * Constructor
      */
     public PasswordResetToken() {
-		super();
+        super();
     }
-    
-    //--- GETTERS & SETTERS FOR FIELDS
-    public void setIdUser( String idUser ) {
-        this.idUser = idUser ;
+
+    // --- GETTERS & SETTERS FOR FIELDS
+    public void setIdUser(String idUser) {
+        this.idUser = idUser;
     }
+
     public String getIdUser() {
         return this.idUser;
     }
 
-    public void setToken( String token ) {
-        this.token = token ;
+    public void setToken(String token) {
+        this.token = token;
     }
+
     public String getToken() {
         return this.token;
     }
 
-    public void setExpiryDate( Date expiryDate ) {
-        this.expiryDate = expiryDate ;
+    public void setExpiryDate(Date expiryDate) {
+        this.expiryDate = expiryDate;
     }
+
     public Date getExpiryDate() {
         return this.expiryDate;
     }
 
-    //--- GETTERS FOR LINKS
+    // --- GETTERS FOR LINKS
     public Users getUsers() {
         return this.users;
-    } 
+    }
 
-    //--- toString specific method
-	@Override
-    public String toString() { 
-        StringBuilder sb = new StringBuilder(); 
+    // --- toString specific method
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
         sb.append(idUser);
         sb.append("|");
         sb.append(token);
         sb.append("|");
         sb.append(expiryDate);
-        return sb.toString(); 
-    } 
+        return sb.toString();
+    }
 
 }

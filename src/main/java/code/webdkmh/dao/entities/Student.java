@@ -7,7 +7,15 @@ package code.webdkmh.dao.entities;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
-import javax.persistence.*;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
+import javax.persistence.Table;
 
 /**
  * JPA entity class for "Student"
@@ -33,7 +41,7 @@ public class Student implements Serializable {
     @Column(name="ID_Faculty", nullable=false, length=50)
     private String     idFaculty ;
 
-    @Temporal(TemporalType.TIMESTAMP)
+    // @Temporal(TemporalType.TIMESTAMP)
     @Column(name="Create_date", nullable=false)
     private Date       createDate ;
 
@@ -108,7 +116,7 @@ public class Student implements Serializable {
         return this.idFaculty;
     }
 
-    public void setCreateDate( Date createDate ) {
+    public void setCreateDate(Date createDate ) {
         this.createDate = createDate ;
     }
     public Date getCreateDate() {

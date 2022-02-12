@@ -1,6 +1,6 @@
 package code.webdkmh.security;
 
-import code.webdkmh.dao.entity.User;
+import code.webdkmh.dao.entities.Users;
 import code.webdkmh.dao.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
@@ -24,18 +24,18 @@ public class UsersService implements UserDetailsService {
     @Transactional
     public UserDetails loadUserByUsername(String id) throws UsernameNotFoundException {
 
-        User user = userService.findById(id);
+        Users user = userService.findById(id);
 
         if (user == null) {
             throw new UsernameNotFoundException("User not found");
         }
 
         Set<GrantedAuthority> grantedAuthorities = new HashSet<>();
-        grantedAuthorities.add(new SimpleGrantedAuthority("ROLE_" + user.getIdUserKind()));
+        grantedAuthorities.add(new SimpleGrantedAuthority("ROLE_" + user.getUserHasRole().getIdUserKind()));
+        System.out.println(user.getUserHasRole().getIdUserKind());
         CustomUserDetail userDetail = new CustomUserDetail();
         userDetail.setUsers(user);
         userDetail.setAuthorities(grantedAuthorities);
-        System.out.println(userDetail.getAuthorities());
         return userDetail;
     }
 }

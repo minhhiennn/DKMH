@@ -1,6 +1,6 @@
 package code.webdkmh.security;
 
-import code.webdkmh.dao.entity.User;
+import code.webdkmh.dao.entities.Users;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -8,16 +8,16 @@ import java.util.Collection;
 
 public class CustomUserDetail implements UserDetails {
 
-    private User user;
+    private Users user;
 
     Collection<GrantedAuthority> authorities = null;
 
 
-    public User getUsers() {
+    public Users getUsers() {
         return user;
     }
 
-    public void setUsers(User user) {
+    public void setUsers(Users user) {
         this.user = user;
     }
 
@@ -37,7 +37,7 @@ public class CustomUserDetail implements UserDetails {
 
     @Override
     public String getUsername() {
-        return user.getId();
+        return user.getIdUser();
     }
 
     @Override

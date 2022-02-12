@@ -6,7 +6,15 @@ package code.webdkmh.dao.entities;
 
 import java.io.Serializable;
 import java.util.Date;
-import javax.persistence.*;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
+import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 /**
  * JPA entity class for "TimeForCourseRegister"
@@ -56,14 +64,14 @@ public class TimeForCourseRegister implements Serializable {
         return this.idSemester;
     }
 
-    public void setStartDate( Date startDate ) {
+    public void setStartDate(Date startDate ) {
         this.startDate = startDate ;
     }
     public Date getStartDate() {
         return this.startDate;
     }
 
-    public void setEndDate( Date endDate ) {
+    public void setEndDate(Date endDate ) {
         this.endDate = endDate ;
     }
     public Date getEndDate() {
