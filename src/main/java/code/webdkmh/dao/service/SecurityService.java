@@ -19,7 +19,7 @@ public class SecurityService {
 
         return !isTokenFound(passToken) ? "invalidToken"
                 : isTokenExpired(passToken) ? "expired"
-                : null;
+                        : null;
     }
 
     private boolean isTokenFound(PasswordResetToken passToken) {
@@ -29,8 +29,10 @@ public class SecurityService {
     private boolean isTokenExpired(PasswordResetToken passToken) {
         Instant now = Instant.now();
         Instant twentyFourHoursEarlier = now.minus(24, ChronoUnit.HOURS);
-        // Is that moment (a) not before 24 hours ago, AND (b) before now (not in the future)?
-        Boolean within24Hours = (!passToken.getExpiryDate().isBefore(twentyFourHoursEarlier)) && passToken.getExpiryDate().isBefore(now);
+        // Is that moment (a) not before 24 hours ago, AND (b) before now (not in the
+        // future)?
+        Boolean within24Hours = (!passToken.getExpiryDate().isBefore(twentyFourHoursEarlier))
+                && passToken.getExpiryDate().isBefore(now);
         return !within24Hours;
     }
 }
