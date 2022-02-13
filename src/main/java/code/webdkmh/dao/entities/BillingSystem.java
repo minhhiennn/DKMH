@@ -34,7 +34,7 @@ public class BillingSystem implements Serializable {
     private Double paymoney;
 
     @Column(name = "creadit")
-    private Short creadit;
+    private int creadit;
 
 
     //--- ENTITY LINKS ( RELATIONSHIP )
@@ -79,11 +79,11 @@ public class BillingSystem implements Serializable {
         return this.paymoney;
     }
 
-    public void setCreadit(Short creadit) {
+    public void setCreadit(int creadit) {
         this.creadit = creadit;
     }
 
-    public Short getCreadit() {
+    public int getCreadit() {
         return this.creadit;
     }
 

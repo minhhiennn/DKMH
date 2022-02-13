@@ -44,10 +44,10 @@ public class Semester implements Serializable {
     private Date endDate;
 
     @Column(name = "years")
-    private Short years;
+    private int years;
 
     @Column(name = "number_S", nullable = false)
-    private Short numberS;
+    private int numberS;
 
     // --- ENTITY LINKS ( RELATIONSHIP )
     @OneToMany(mappedBy = "semester")
@@ -103,19 +103,19 @@ public class Semester implements Serializable {
         return this.endDate;
     }
 
-    public void setYears(Short years) {
+    public void setYears(int years) {
         this.years = years;
     }
 
-    public Short getYears() {
+    public int getYears() {
         return this.years;
     }
 
-    public void setNumberS(Short numberS) {
+    public void setNumberS(int numberS) {
         this.numberS = numberS;
     }
 
-    public Short getNumberS() {
+    public int getNumberS() {
         return this.numberS;
     }
 

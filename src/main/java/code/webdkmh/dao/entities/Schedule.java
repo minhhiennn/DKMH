@@ -46,7 +46,7 @@ public class Schedule implements Serializable {
     private String theoretical;
 
     @Column(name = "Teaching_Day", nullable = false)
-    private Short teachingDay;
+    private int teachingDay;
 
     @Temporal(TemporalType.DATE)
     @Column(name = "Start_Day", nullable = false)
@@ -123,11 +123,11 @@ public class Schedule implements Serializable {
         return this.theoretical;
     }
 
-    public void setTeachingDay(Short teachingDay) {
+    public void setTeachingDay(int teachingDay) {
         this.teachingDay = teachingDay;
     }
 
-    public Short getTeachingDay() {
+    public int getTeachingDay() {
         return this.teachingDay;
     }
 
