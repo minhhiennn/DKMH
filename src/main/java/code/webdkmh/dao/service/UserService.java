@@ -1,17 +1,27 @@
 package code.webdkmh.dao.service;
 
-import code.webdkmh.dao.entities.Users;
-import code.webdkmh.dao.repositories.PasswordResetTokenRepository;
-import code.webdkmh.dao.repositories.UsersRepository;
+import java.util.HashSet;
+import java.util.Optional;
+import java.util.Set;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Optional;
+import code.webdkmh.dao.custom.CustomUserDetail;
+import code.webdkmh.dao.entities.Users;
+import code.webdkmh.dao.repositories.PasswordResetTokenRepository;
+import code.webdkmh.dao.repositories.UsersRepository;
 
-@Service
-public class UserService {
+@Service("userDetailsService")
+public class UserService implements UserDetailsService {
 
     @Autowired
     private UsersRepository userRepository;
@@ -33,5 +43,25 @@ public class UserService {
     public void changeUserPassword(Users user, String password) {
         user.setPassword(passwordEncoder.encode(password));
         userRepository.save(user);
+    }
+
+    @Override
+    @Transactional
+    public UserDetails loadUserByUsername(String id) throws UsernameNotFoundException {
+
+        Users user = findById(id);
+
+        if (user == null) {
+            throw new UsernameNotFoundException("User not found");
+        }
+
+        Set<GrantedAuthority> grantedAuthorities = new HashSet<>();
+        grantedAuthorities.add(new SimpleGrantedAuthority("ROLE_" + user.getUserHasRole().getIdUserKind()));
+        System.out.println(user.getUserHasRole().getIdUserKind());
+        System.out.println(user.getStudent().getIdStudent());
+        CustomUserDetail userDetail = new CustomUserDetail();
+        userDetail.setUsers(user);
+        userDetail.setAuthorities(grantedAuthorities);
+        return userDetail;
     }
 }

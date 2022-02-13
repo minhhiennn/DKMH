@@ -1,7 +1,5 @@
-package code.webdkmh.security;
+package code.webdkmh.utli.security;
 
-import com.github.mkopylec.recaptcha.security.login.FormLoginConfigurerEnhancer;
-import com.github.mkopylec.recaptcha.security.login.LoginFailuresClearingHandler;
 import com.github.mkopylec.recaptcha.security.login.FormLoginConfigurerEnhancer;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,7 +31,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         enhancer.addRecaptchaSupport(http.authorizeRequests()
                 .antMatchers("/student/*").hasRole("st")
                 .and().formLogin()).loginPage("/login")
-                .successHandler(clearingHandler)
+                .successHandler(captchaAuthenticationSuccessHandler)
                 // .failureUrl("/login?error=true")
                 // .permitAll()
                 .and()
@@ -74,7 +72,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
     @Autowired
-    MySimpleUrlAuthenticationSuccessHandler1 clearingHandler;
+    CaptchaAuthenticationSuccessHandler captchaAuthenticationSuccessHandler;
 
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
