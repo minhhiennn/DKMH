@@ -6,6 +6,8 @@ import code.webdkmh.dao.service.PasswordResetTokenService;
 import code.webdkmh.dao.service.SecurityService;
 import code.webdkmh.dao.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.security.core.AuthenticationException;
@@ -13,6 +15,7 @@ import org.springframework.security.web.WebAttributes;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import code.webdkmh.utli.readFileExcel.readXLSX;
 
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -22,13 +25,14 @@ import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.io.File;
 import java.io.UnsupportedEncodingException;
-import java.time.Instant;
 import java.util.Date;
 import java.util.Optional;
 import java.util.UUID;
 
 import org.apache.commons.text.RandomStringGenerator;
+import org.springframework.web.multipart.MultipartFile;
 
 @Controller
 public class StudentController {
@@ -44,6 +48,24 @@ public class StudentController {
 
     @Autowired
     private SecurityService securityService;
+
+    @RequestMapping(value = "/addStudent")
+    public String addStudent() {
+        return "student/addStudent";
+    }
+
+    @RequestMapping(value = "/upload", method = RequestMethod.POST)
+    public ResponseEntity<?> uploadFileExcel(@RequestParam("file") MultipartFile file) {
+        String fileName = file.getOriginalFilename();
+        String path = "D:\\test\\" + fileName;
+        try {
+            file.transferTo(new File("D:\\test\\" + fileName));
+            readXLSX.readExcelXLSX(path);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+        return ResponseEntity.ok("File uploaded successfully.");
+    }
 
     @RequestMapping(value = {"/student/", "/student/home"})
     public String shopPage(Model model) {
