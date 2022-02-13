@@ -1,4 +1,4 @@
-package code.webdkmh.security;
+package code.webdkmh.dao.custom;
 
 import code.webdkmh.dao.entities.Users;
 import org.springframework.security.core.GrantedAuthority;

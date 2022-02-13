@@ -1,4 +1,4 @@
-package code.webdkmh.security;
+package code.webdkmh.utli.security;
 
 import java.io.IOException;
 
@@ -17,24 +17,24 @@ import com.github.mkopylec.recaptcha.security.login.LoginFailuresManager;
 import org.springframework.stereotype.Component;
 
 @Component
-public class MySimpleUrlAuthenticationSuccessHandler1 extends LoginFailuresClearingHandler {
+public class CaptchaAuthenticationSuccessHandler extends LoginFailuresClearingHandler {
 
     @Autowired
     private RecaptchaValidator recaptchaValidator;
 
-    public MySimpleUrlAuthenticationSuccessHandler1(LoginFailuresManager failuresManager) {
+    public CaptchaAuthenticationSuccessHandler(LoginFailuresManager failuresManager) {
         super(failuresManager);
     }
 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
                                         Authentication authentication) throws IOException, ServletException {
-        // System.out.println(failuresManager.getLoginFailuresCount(request));
-        // handle(request, response, authentication);
-        // clearAuthenticationAttributes(request);
+
         ValidationResult result = recaptchaValidator.validate(request);
         if (result.isSuccess()) {
+            System.out.println("ok");
         } else {
+            System.out.println("no ok");
         }
     }
 
