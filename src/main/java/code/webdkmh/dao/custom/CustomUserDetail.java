@@ -12,7 +12,6 @@ public class CustomUserDetail implements UserDetails {
 
     Collection<GrantedAuthority> authorities = null;
 
-
     public Users getUsers() {
         return user;
     }

@@ -39,7 +39,7 @@ public class Course implements Serializable {
     private Integer    years ;
 
     @Column(name="number_S")
-    private Short      numberS ;
+    private int      numberS ;
 
 
     //--- ENTITY LINKS ( RELATIONSHIP )
@@ -100,10 +100,10 @@ public class Course implements Serializable {
         return this.years;
     }
 
-    public void setNumberS( Short numberS ) {
+    public void setNumberS( int numberS ) {
         this.numberS = numberS ;
     }
-    public Short getNumberS() {
+    public int getNumberS() {
         return this.numberS;
     }
 

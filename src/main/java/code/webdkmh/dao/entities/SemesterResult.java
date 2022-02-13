@@ -38,7 +38,7 @@ public class SemesterResult implements Serializable {
     private Double     gradeAv4 ;
 
     @Column(name="credit_Get")
-    private Short      creditGet ;
+    private int      creditGet ;
 
 
     //--- ENTITY LINKS ( RELATIONSHIP )
@@ -87,10 +87,10 @@ public class SemesterResult implements Serializable {
         return this.gradeAv4;
     }
 
-    public void setCreditGet( Short creditGet ) {
+    public void setCreditGet( int creditGet ) {
         this.creditGet = creditGet ;
     }
-    public Short getCreditGet() {
+    public int getCreditGet() {
         return this.creditGet;
     }
 

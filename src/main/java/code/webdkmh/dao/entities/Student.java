@@ -24,167 +24,172 @@ import javax.persistence.Table;
  *
  */
 @Entity
-@Table(name="Student", schema="dbo", catalog="Course_Registration" )
+@Table(name = "Student", schema = "dbo", catalog = "Course_Registration")
 public class Student implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    //--- ENTITY PRIMARY KEY 
+    // --- ENTITY PRIMARY KEY
     @Id
-    @Column(name="ID_Student", nullable=false, length=50)
-    private String     idStudent ;
+    @Column(name = "ID_Student", nullable = false, length = 50)
+    private String idStudent;
 
-    //--- ENTITY DATA FIELDS 
-    @Column(name="Student_Name", nullable=false, length=50)
-    private String     studentName ;
+    // --- ENTITY DATA FIELDS
+    @Column(name = "Student_Name", nullable = false, length = 50)
+    private String studentName;
 
-    @Column(name="ID_Faculty", nullable=false, length=50)
-    private String     idFaculty ;
+    @Column(name = "ID_Faculty", nullable = false, length = 50)
+    private String idFaculty;
 
     // @Temporal(TemporalType.TIMESTAMP)
-    @Column(name="Create_date", nullable=false)
-    private Date       createDate ;
+    @Column(name = "Create_date", nullable = false)
+    private Date createDate;
 
-    @Column(name="Clazz_code", nullable=false, length=50)
-    private String     clazzCode ;
+    @Column(name = "Clazz_code", nullable = false, length = 50)
+    private String clazzCode;
 
-    @Column(name="Cert_number_required", nullable=false)
-    private Short      certNumberRequired ;
+    @Column(name = "Cert_number_required", nullable = false)
+    private int certNumberRequired;
 
-    @Column(name="Cert_number_accumulated", nullable=false)
-    private Short      certNumberAccumulated ;
+    @Column(name = "Cert_number_accumulated", nullable = false)
+    private int certNumberAccumulated;
 
+    // --- ENTITY LINKS ( RELATIONSHIP )
+    @OneToMany(mappedBy = "student")
+    private List<SubPass> listOfSubPass;
 
-    //--- ENTITY LINKS ( RELATIONSHIP )
-    @OneToMany(mappedBy="student")
-    private List<SubPass> listOfSubPass ; 
+    @OneToMany(mappedBy = "student")
+    private List<SemesterResult> listOfSemesterResult;
 
-    @OneToMany(mappedBy="student")
-    private List<SemesterResult> listOfSemesterResult ; 
+    @OneToMany(mappedBy = "student")
+    private List<StudentSchedule> listOfStudentSchedule;
 
-    @OneToMany(mappedBy="student")
-    private List<StudentSchedule> listOfStudentSchedule ; 
-
-    @OneToOne(mappedBy="student")
-    private FinalResult finalResult ; 
+    @OneToOne(mappedBy = "student")
+    private FinalResult finalResult;
 
     @OneToOne
-    @JoinColumn(name="ID_Student", referencedColumnName="ID_User", insertable=false, updatable=false)
-    private Users      users ; 
+    @JoinColumn(name = "ID_Student", referencedColumnName = "ID_User", insertable = false, updatable = false)
+    private Users users;
 
-    @OneToMany(mappedBy="student")
-    private List<StudentScheduleR> listOfStudentScheduleR ; 
-
-    @ManyToOne
-    @JoinColumn(name="ID_Faculty", referencedColumnName="ID_Faculty", insertable=false, updatable=false)
-    private Faculty    faculty ; 
-
-    @OneToMany(mappedBy="student")
-    private List<BillingSystem> listOfBillingSystem ; 
+    @OneToMany(mappedBy = "student")
+    private List<StudentScheduleR> listOfStudentScheduleR;
 
     @ManyToOne
-    @JoinColumn(name="Clazz_code", referencedColumnName="Clazz_code", insertable=false, updatable=false)
-    private Clazz      clazz ; 
+    @JoinColumn(name = "ID_Faculty", referencedColumnName = "ID_Faculty", insertable = false, updatable = false)
+    private Faculty faculty;
 
+    @OneToMany(mappedBy = "student")
+    private List<BillingSystem> listOfBillingSystem;
+
+    @ManyToOne
+    @JoinColumn(name = "Clazz_code", referencedColumnName = "Clazz_code", insertable = false, updatable = false)
+    private Clazz clazz;
 
     /**
      * Constructor
      */
     public Student() {
-		super();
+        super();
     }
-    
-    //--- GETTERS & SETTERS FOR FIELDS
-    public void setIdStudent( String idStudent ) {
-        this.idStudent = idStudent ;
+
+    // --- GETTERS & SETTERS FOR FIELDS
+    public void setIdStudent(String idStudent) {
+        this.idStudent = idStudent;
     }
+
     public String getIdStudent() {
         return this.idStudent;
     }
 
-    public void setStudentName( String studentName ) {
-        this.studentName = studentName ;
+    public void setStudentName(String studentName) {
+        this.studentName = studentName;
     }
+
     public String getStudentName() {
         return this.studentName;
     }
 
-    public void setIdFaculty( String idFaculty ) {
-        this.idFaculty = idFaculty ;
+    public void setIdFaculty(String idFaculty) {
+        this.idFaculty = idFaculty;
     }
+
     public String getIdFaculty() {
         return this.idFaculty;
     }
 
-    public void setCreateDate(Date createDate ) {
-        this.createDate = createDate ;
+    public void setCreateDate(Date createDate) {
+        this.createDate = createDate;
     }
+
     public Date getCreateDate() {
         return this.createDate;
     }
 
-    public void setClazzCode( String clazzCode ) {
-        this.clazzCode = clazzCode ;
+    public void setClazzCode(String clazzCode) {
+        this.clazzCode = clazzCode;
     }
+
     public String getClazzCode() {
         return this.clazzCode;
     }
 
-    public void setCertNumberRequired( Short certNumberRequired ) {
-        this.certNumberRequired = certNumberRequired ;
+    public void setCertNumberRequired(int certNumberRequired) {
+        this.certNumberRequired = certNumberRequired;
     }
-    public Short getCertNumberRequired() {
+
+    public int getCertNumberRequired() {
         return this.certNumberRequired;
     }
 
-    public void setCertNumberAccumulated( Short certNumberAccumulated ) {
-        this.certNumberAccumulated = certNumberAccumulated ;
+    public void setCertNumberAccumulated(int certNumberAccumulated) {
+        this.certNumberAccumulated = certNumberAccumulated;
     }
-    public Short getCertNumberAccumulated() {
+
+    public int getCertNumberAccumulated() {
         return this.certNumberAccumulated;
     }
 
-    //--- GETTERS FOR LINKS
+    // --- GETTERS FOR LINKS
     public List<SubPass> getListOfSubPass() {
         return this.listOfSubPass;
-    } 
+    }
 
     public List<SemesterResult> getListOfSemesterResult() {
         return this.listOfSemesterResult;
-    } 
+    }
 
     public List<StudentSchedule> getListOfStudentSchedule() {
         return this.listOfStudentSchedule;
-    } 
+    }
 
     public FinalResult getFinalResult() {
         return this.finalResult;
-    } 
+    }
 
     public Users getUsers() {
         return this.users;
-    } 
+    }
 
     public List<StudentScheduleR> getListOfStudentScheduleR() {
         return this.listOfStudentScheduleR;
-    } 
+    }
 
     public Faculty getFaculty() {
         return this.faculty;
-    } 
+    }
 
     public List<BillingSystem> getListOfBillingSystem() {
         return this.listOfBillingSystem;
-    } 
+    }
 
     public Clazz getClazz() {
         return this.clazz;
-    } 
+    }
 
-    //--- toString specific method
-	@Override
-    public String toString() { 
-        StringBuilder sb = new StringBuilder(); 
+    // --- toString specific method
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
         sb.append(idStudent);
         sb.append("|");
         sb.append(studentName);
@@ -198,7 +203,7 @@ public class Student implements Serializable {
         sb.append(certNumberRequired);
         sb.append("|");
         sb.append(certNumberAccumulated);
-        return sb.toString(); 
-    } 
+        return sb.toString();
+    }
 
 }
