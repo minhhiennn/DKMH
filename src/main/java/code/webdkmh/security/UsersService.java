@@ -33,6 +33,7 @@ public class UsersService implements UserDetailsService {
         Set<GrantedAuthority> grantedAuthorities = new HashSet<>();
         grantedAuthorities.add(new SimpleGrantedAuthority("ROLE_" + user.getUserHasRole().getIdUserKind()));
         System.out.println(user.getUserHasRole().getIdUserKind());
+        System.out.println(user.getStudent().getIdStudent());
         CustomUserDetail userDetail = new CustomUserDetail();
         userDetail.setUsers(user);
         userDetail.setAuthorities(grantedAuthorities);

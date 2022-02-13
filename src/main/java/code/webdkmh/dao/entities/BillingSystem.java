@@ -12,10 +12,9 @@ import javax.persistence.*;
  * JPA entity class for "BillingSystem"
  *
  * @author Telosys
- *
  */
 @Entity
-@Table(name="Billing_System", schema="dbo", catalog="Course_Registration" )
+@Table(name = "Billing_System", schema = "dbo", catalog = "Course_Registration")
 @IdClass(BillingSystemId.class)
 public class BillingSystem implements Serializable {
 
@@ -23,63 +22,67 @@ public class BillingSystem implements Serializable {
 
     //--- ENTITY PRIMARY KEY 
     @Id
-    @Column(name="ID_Semester", nullable=false, length=50)
-    private String     idSemester ;
+    @Column(name = "ID_Semester", nullable = false, length = 50)
+    private String idSemester;
 
     @Id
-    @Column(name="ID_Student", nullable=false, length=50)
-    private String     idStudent ;
+    @Column(name = "ID_Student", nullable = false, length = 50)
+    private String idStudent;
 
     //--- ENTITY DATA FIELDS 
-    @Column(name="Paymoney")
-    private Double     paymoney ;
+    @Column(name = "Paymoney")
+    private Double paymoney;
 
-    @Column(name="creadit")
-    private Short      creadit ;
+    @Column(name = "creadit")
+    private Short creadit;
 
 
     //--- ENTITY LINKS ( RELATIONSHIP )
     @ManyToOne
-    @JoinColumn(name="ID_Student", referencedColumnName="ID_Student", insertable=false, updatable=false)
-    private Student    student ; 
+    @JoinColumn(name = "ID_Student", referencedColumnName = "ID_Student", insertable = false, updatable = false)
+    private Student student;
 
     @ManyToOne
-    @JoinColumn(name="ID_Semester", referencedColumnName="ID_Semester", insertable=false, updatable=false)
-    private Semester   semester ; 
+    @JoinColumn(name = "ID_Semester", referencedColumnName = "ID_Semester", insertable = false, updatable = false)
+    private Semester semester;
 
 
     /**
      * Constructor
      */
     public BillingSystem() {
-		super();
+        super();
     }
-    
+
     //--- GETTERS & SETTERS FOR FIELDS
-    public void setIdSemester( String idSemester ) {
-        this.idSemester = idSemester ;
+    public void setIdSemester(String idSemester) {
+        this.idSemester = idSemester;
     }
+
     public String getIdSemester() {
         return this.idSemester;
     }
 
-    public void setIdStudent( String idStudent ) {
-        this.idStudent = idStudent ;
+    public void setIdStudent(String idStudent) {
+        this.idStudent = idStudent;
     }
+
     public String getIdStudent() {
         return this.idStudent;
     }
 
-    public void setPaymoney( Double paymoney ) {
-        this.paymoney = paymoney ;
+    public void setPaymoney(Double paymoney) {
+        this.paymoney = paymoney;
     }
+
     public Double getPaymoney() {
         return this.paymoney;
     }
 
-    public void setCreadit( Short creadit ) {
-        this.creadit = creadit ;
+    public void setCreadit(Short creadit) {
+        this.creadit = creadit;
     }
+
     public Short getCreadit() {
         return this.creadit;
     }
@@ -87,16 +90,16 @@ public class BillingSystem implements Serializable {
     //--- GETTERS FOR LINKS
     public Student getStudent() {
         return this.student;
-    } 
+    }
 
     public Semester getSemester() {
         return this.semester;
-    } 
+    }
 
     //--- toString specific method
-	@Override
-    public String toString() { 
-        StringBuilder sb = new StringBuilder(); 
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
         sb.append(idSemester);
         sb.append("|");
         sb.append(idStudent);
@@ -104,7 +107,7 @@ public class BillingSystem implements Serializable {
         sb.append(paymoney);
         sb.append("|");
         sb.append(creadit);
-        return sb.toString(); 
-    } 
+        return sb.toString();
+    }
 
 }

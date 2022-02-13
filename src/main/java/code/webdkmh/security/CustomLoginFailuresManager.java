@@ -38,11 +38,6 @@ public class CustomLoginFailuresManager extends LoginFailuresManager {
 
     @Override
     public int getLoginFailuresCount(HttpServletRequest arg0) {
-        ValidationResult result = recaptchaValidator.validate(arg0);
-        if (result.isSuccess()) {
-        } else {
-        }
-
         return 1;
     }
 
