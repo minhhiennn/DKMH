@@ -198,7 +198,6 @@ CREATE TABLE Sub_Pass
 
 CREATE TABLE semester_Result (
   ID_Semester nvarchar(50) NOT NULL FOREIGN KEY REFERENCES Semester (ID_Semester),
-  --
   ID_Student nvarchar(50) NOT NULL FOREIGN KEY REFERENCES Student (ID_Student) ON DELETE CASCADE,
   --diem trung binh trong ki nay 
   grade_Av float,
@@ -297,7 +296,7 @@ AS
                END
   AND c.number_S =
                   CASE
-                    WHEN c.number_S IS NULL THEN c.number_S
+                    WHEN c.number_S = 0 THEN c.number_S
                     ELSE (SELECT
                         number_S
                       FROM Semester
@@ -638,19 +637,19 @@ insert into Time_For_Course_Register Values(N'2021_2','3/5/2022','12/5/2022')
 
 -- insert into course
 -- đại cương
-insert into Course Values(N'213603',null,N'Anh văn 1',4,1,null)
-insert into Course Values(N'213604',null,N'Anh văn 2',3,2,null)
-insert into Course Values(N'202108',null,N'Toán cao cấp A1',3,1,null)
-insert into Course Values(N'202109',null,N'Toán cao cấp A2',3,1,null)
-insert into Course Values(N'202110',null,N'Toán cao cấp A3',3,2,null)
-insert into Course Values(N'200101',null,N'Triết học Mác Lênin',3,2,null)
-insert into Course Values(N'200103',null,N'Chủ nghĩa xã hội khoa học',2,2,null)
-insert into Course Values(N'200102',null,N'Kinh tế chính trị Mác-Lênin',2,2,null)
-insert into Course Values(N'202622',null,N'Pháp luật đại cương',2,1,null)
-insert into Course Values(N'202501',null,N'Giáo dục thể chất 1*',1,1,null)
-insert into Course Values(N'200107',null,N'Tư tưởng Hồ Chí Minh',2,2,null)
-insert into Course Values(N'214201',null,N'Nhập môn tin học',3,1,null)
-insert into Course Values(N'202206',null,N'Vật lý 2',2,2,null)
+insert into Course Values(N'213603',null,N'Anh văn 1',4,1,1)
+insert into Course Values(N'213604',null,N'Anh văn 2',3,2,2)
+insert into Course Values(N'202108',null,N'Toán cao cấp A1',3,1,2)
+insert into Course Values(N'202109',null,N'Toán cao cấp A2',3,1,1)
+insert into Course Values(N'202110',null,N'Toán cao cấp A3',3,2,2)
+insert into Course Values(N'200101',null,N'Triết học Mác Lênin',3,2,1)
+insert into Course Values(N'200103',null,N'Chủ nghĩa xã hội khoa học',2,2,2)
+insert into Course Values(N'200102',null,N'Kinh tế chính trị Mác-Lênin',2,2,2)
+insert into Course Values(N'202622',null,N'Pháp luật đại cương',2,1,1)
+insert into Course Values(N'202501',null,N'Giáo dục thể chất 1*',1,1,2)
+insert into Course Values(N'200107',null,N'Tư tưởng Hồ Chí Minh',2,2,2)
+insert into Course Values(N'214201',null,N'Nhập môn tin học',3,1,1)
+insert into Course Values(N'202206',null,N'Vật lý 2',2,2,1)
 
 -- chuyên nghành
 
@@ -996,3 +995,8 @@ select * from USERS
 -- AND st.ID_Student = '18130005'
 
 
+select * from Sub_Pass where ID_Semester = '2018_1'  ORDER BY ID_Student
+select * from Final_Result
+select * from semester_Result where ID_Semester = '2018_1'  ORDER BY ID_Student
+SELECT * FROM Sub_Pass sp WHERE  sp.ID_Student = '18130005'
+select * from Student

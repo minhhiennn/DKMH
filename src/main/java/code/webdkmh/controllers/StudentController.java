@@ -15,7 +15,6 @@ import org.springframework.security.web.WebAttributes;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
-import code.webdkmh.utli.readFileExcel.readXLSX;
 
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -60,14 +59,14 @@ public class StudentController {
         String path = "D:\\test\\" + fileName;
         try {
             file.transferTo(new File("D:\\test\\" + fileName));
-            readXLSX.readExcelXLSX(path);
+            // readXLSX.readExcelXLSX(path);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
         return ResponseEntity.ok("File uploaded successfully.");
     }
 
-    @RequestMapping(value = {"/student/", "/student/home"})
+    @RequestMapping(value = { "/student/", "/student/home" })
     public String shopPage(Model model) {
         try {
             model.addAttribute("listUsers", "1");
@@ -84,7 +83,7 @@ public class StudentController {
 
     @RequestMapping(value = "/login")
     public String loginError(HttpServletRequest request, Model model,
-                             @RequestParam(value = "error", required = false) String error) {
+            @RequestParam(value = "error", required = false) String error) {
         if (error != null && error.equals("true")) {
             HttpSession session = request.getSession(false);
             String errorMessage = null;
@@ -103,7 +102,7 @@ public class StudentController {
     @RequestMapping(value = "/resetPassword", method = RequestMethod.POST)
     @ResponseBody
     public String resetPassword(HttpServletRequest request,
-                                @RequestParam("idUser") String idUser) throws MessagingException, UnsupportedEncodingException {
+            @RequestParam("idUser") String idUser) throws MessagingException, UnsupportedEncodingException {
         Users user = userService.findById(idUser);
         String userEmail = user.getEmail();
         String siteUrl = request.getRequestURL().toString().replace(request.getServletPath(), "");
@@ -141,7 +140,10 @@ public class StudentController {
         }
     }
 
-    private void sendEmailForgetPassword(String toUserEmail, String token, String siteURL) throws MessagingException, UnsupportedEncodingException {
+
+
+    private void sendEmailForgetPassword(String toUserEmail, String token, String siteURL)
+            throws MessagingException, UnsupportedEncodingException {
         toUserEmail = "18130076@st.hcmuaf.edu.vn";
         String toAddress = toUserEmail;
         String fromAddress = "minhhien2000k@gmail.com";

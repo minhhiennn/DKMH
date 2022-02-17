@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <meta charset="UTF-8">
+    <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+</head>
+
+<body>
+    <button onclick="searchText()">Click me</button>
+
+    <table class="table">
+        <select id="entityName" name="entityName" th:onchange="'window.location.href = \'' + @{/} + '?entityClass=\' + this.value ' ">
+            <option th:each="entityName : ${listEntitiesName}" th:text="${entityName}"></option>
+        </select>
+
+        <thead>
+            <tr>
+                <th th:each="entityName : ${listEntitiesVariable}" value="${entityName}" th:text="${entityName}" scope="col"></th>
+                <th>Button</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="entityName,iterStat  : ${listEntitiesRecord.get(listEntitiesVariable.get(0))}">
+                <td th:id="${iterStat.index} + ${entityName1}  " contenteditable th:each="entityName1 : ${listEntitiesVariable}" th:text="${listEntitiesRecord.get(entityName1).get(iterStat.index)}"></td>
+                <td> <button th:attr="onclick='searchText(\'' + ${iterStat.index}+  '\');'">Update</button></td>
+            </tr>
+        </tbody>
+    </table>
+</body>
+<script th:inline="javascript">
+    function searchText(id) {
+        /*<![CDATA[*/
+        var listOfObjects = [];
+        const params = new Proxy(new URLSearchParams(window.location.search), {
+            get: (searchParams, prop) => searchParams.get(prop),
+        });
+        let value = params.entityClass; // "some_value"
+        const map1 = new Map([
+            /*[# th:each="entityVariable : ${listEntitiesVariable}"]*/
+            [ /*[[${entityVariable}]]*/, document.getElementById(id + /*[[${entityVariable}]]*/ + "").textContent],
+            /*[/]*/
+        ]);
+        const search = Object.fromEntries(map1);
+        listOfObjects.push(search);
+        listOfObjects.push(search);
+        console.log(listOfObjects);
+        $.ajax({
+            type: "POST",
+            contentType: 'application/json; charset=utf-8',
+            dataType: 'json',
+            url: "/updateEntity?entityClass=" + value,
+            data: JSON.stringify(search),
+            success: function (result) {
+                alert("ok")
+            }
+        });
+        /*]]>*/
+    }
+
+</script>
+
+</html>
