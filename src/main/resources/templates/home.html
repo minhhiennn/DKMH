@@ -12,50 +12,115 @@
 </head>
 
 <body>
-    <button onclick="searchText()">Click me</button>
-
+    <button onclick=modifyAll(false)>Update</button>
     <table class="table">
-        <select id="entityName" name="entityName" th:onchange="'window.location.href = \'' + @{/} + '?entityClass=\' + this.value ' ">
-            <option th:each="entityName : ${listEntitiesName}" th:text="${entityName}"></option>
+        <select th:onchange="'window.location.href = \'' + @{/} + '?entityClass=\' + this.value ' ">
+            <option th:each="entityName : ${listEntitiesName}" th:text="${entityName}" th:attr="selected=${ entityClassModel == entityName ? 'selected':'false'}"></option>
         </select>
 
         <thead>
             <tr>
-                <th th:each="entityName : ${listEntitiesVariable}" value="${entityName}" th:text="${entityName}" scope="col"></th>
+                <th>Number</th>
+                <th th:each="entityVariable : ${listEntitiesVariable}" value="${entityVariable}" th:text="${entityVariable}" scope="col"></th>
                 <th>Button</th>
             </tr>
         </thead>
         <tbody>
-            <tr th:each="entityName,iterStat  : ${listEntitiesRecord.get(listEntitiesVariable.get(0))}">
-                <td th:id="${iterStat.index} + ${entityName1}  " contenteditable th:each="entityName1 : ${listEntitiesVariable}" th:text="${listEntitiesRecord.get(entityName1).get(iterStat.index)}"></td>
-                <td> <button th:attr="onclick='searchText(\'' + ${iterStat.index}+  '\');'">Update</button></td>
+            <tr th:each="entityRecord,iterStat  : ${listEntitiesRecord.get(listEntitiesVariable.get(0))}">
+                <td> <input type="checkbox" class="foo" th:value="${iterStat.index}"></td>
+                <td th:attr="contenteditable=${iterStat2.index>= keySize ? 'true' : 'false'}" th:id="${iterStat.index} + ${entityVariable}  " th:each="entityVariable,iterStat2 : ${listEntitiesVariable}" th:text="${listEntitiesRecord.get(entityVariable).get(iterStat.index)}" type="text"></td>
+                <td> <button th:onclick="|Update( ${iterStat.index}, false)|">Update</button></td>
+
             </tr>
         </tbody>
     </table>
 </body>
 <script th:inline="javascript">
-    function searchText(id) {
+    function Update(id, isUpdate) {
         /*<![CDATA[*/
-        var listOfObjects = [];
-        const params = new Proxy(new URLSearchParams(window.location.search), {
+        let params = new Proxy(new URLSearchParams(window.location.search), {
             get: (searchParams, prop) => searchParams.get(prop),
         });
         let value = params.entityClass; // "some_value"
-        const map1 = new Map([
-            /*[# th:each="entityVariable : ${listEntitiesVariable}"]*/
-            [ /*[[${entityVariable}]]*/, document.getElementById(id + /*[[${entityVariable}]]*/ + "").textContent],
+        let url2 = "/updateEntity?entityClass=" + value;
+        let map1 = new Map([
+            /*[# th:each="entityVariable,iterStat : ${listEntitiesVariable}"]*/
+            [ /*[[${entityVariable}]]*/, /*[[${listEntitiesRecord.get(entityVariable).get(iterStat.index)}]]*/+""],
             /*[/]*/
         ]);
-        const search = Object.fromEntries(map1);
-        listOfObjects.push(search);
-        listOfObjects.push(search);
-        console.log(listOfObjects);
+        if (!isUpdate) {
+            let keySize = /*[[${keySize}]]*/+"";
+            if (keySize == 1) {
+                value = "java.lang.Object"
+            } else {
+                value = "code.webdkmh.dao.entities." + params.entityClass + "Id"
+            }
+            let i = 0;
+            map1.forEach((value, key) => {
+                if (i >= keySize) {
+                    map1.delete(key)
+                }
+                i++
+            })
+            url2 = "/deleteEntity?entityClass=" + value + "&entityParent=" + params.entityClass;
+        }
+        let finalJson = Object.fromEntries(map1);
+
         $.ajax({
             type: "POST",
             contentType: 'application/json; charset=utf-8',
             dataType: 'json',
-            url: "/updateEntity?entityClass=" + value,
-            data: JSON.stringify(search),
+            url: url2,
+            data: JSON.stringify(finalJson),
+            success: function (finalJson) {
+                alert("ok")
+            }
+        });
+        /*]]>*/
+    }
+    function modifyAll(isUpdate) {
+        /*<![CDATA[*/
+        const data = [...document.querySelectorAll('.foo:checked')].map(e => e.value);
+        let listOfObjects = [];
+        let params = new Proxy(new URLSearchParams(window.location.search), {
+            get: (searchParams, prop) => searchParams.get(prop),
+        });
+        let keySize = /*[[${keySize}]]*/+"";
+        let value = params.entityClass; // "some_value"
+        let url2 = "/updateEntityList?entityClass=" + value;
+        for (let index = 0; index < data.length; index++) {
+            const currentIndex = data[index];
+            let map1 = new Map([
+                /*[# th:each="entityVariable,iterStat : ${listEntitiesVariable}"]*/
+                [ /*[[${entityVariable}]]*/, "" +/*[[${listEntitiesRecord.get(entityVariable).get(iterStat.index)}]]*/ +""],
+                /*[/]*/
+            ]);
+            if (!isUpdate) {
+                let i = 0;
+                map1.forEach((value, key) => {
+                    if (i >= keySize) {
+                        map1.delete(key)
+                    }
+                    i++
+                })
+            }
+            listOfObjects.push(Object.fromEntries(map1));
+        }
+        if (!isUpdate) {
+            if (keySize == 1) {
+                value = "java.lang.String"
+            } else {
+                value = "code.webdkmh.dao.entities." + params.entityClass + "Id"
+            }
+            url2 = "/deleteEntityList?entityClass=" + value + "&entityParent=" + params.entityClass;
+        }
+        console.log(listOfObjects)
+        $.ajax({
+            type: "POST",
+            contentType: 'application/json; charset=utf-8',
+            dataType: 'json',
+            url: url2,
+            data: JSON.stringify(listOfObjects),
             success: function (result) {
                 alert("ok")
             }

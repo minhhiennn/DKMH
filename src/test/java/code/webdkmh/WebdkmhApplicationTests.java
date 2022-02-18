@@ -139,7 +139,7 @@ public class WebdkmhApplicationTests {
 	@Transactional
 	public void name2() {
 		SemesterResultId id = new SemesterResultId("2018_1", "18130001");
-		System.out.println(entityManager.find(SemesterResult.class, id) + " ok ok");
+		entityManager.remove(entityManager.find(SemesterResult.class, id));
 	}
 
 }

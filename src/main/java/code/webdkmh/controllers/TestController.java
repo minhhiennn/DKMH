@@ -68,6 +68,7 @@ public class TestController {
         List<String> listEntitiesVariableAfter = new ArrayList<String>(listEntitiesVariable);
         model.addAttribute("listEntitiesName", listEntitiesName);
         model.addAttribute("listEntitiesVariable", listEntitiesVariableAfter);
+        model.addAttribute("entityClassModel", entityClass);
         model.addAttribute("keySize", keyCount);
         model.addAttribute("listEntitiesRecord", map);
         return "home";
@@ -77,24 +78,96 @@ public class TestController {
             Throwable.class })
     @RequestMapping(value = "/updateEntity", method = RequestMethod.POST)
     @ResponseBody
-    public String getSearchUserProfiles(@RequestBody String search, @RequestParam("entityClass") String entityClass,
+    public String updateEntity(@RequestBody String json, @RequestParam("entityClass") String entityClass,
             HttpServletRequest request) {
         Gson gson = new Gson();
         try {
-            Object target2 = gson.fromJson(search,
-                    Class.forName("code.webdkmh.dao.entities." + entityClass));
-            entityManager.merge(target2);
-            // List<Object> target3 = gson.fromJson(search, new TypeToken<List<Object>>() {
-            // }.getType());
-            // for (Object object : target3) {
-            // Object target4 = gson.fromJson(object.toString(),
-            // Class.forName("code.webdkmh.dao.entities." + entityClass));
-            // entityManager.merge(target4);
-            // }
+            Object target = gson.fromJson(json, Class.forName("code.webdkmh.dao.entities." + entityClass));
+            entityManager.merge(target);
         } catch (Exception e) {
-            System.out.println(e);
+            System.out.println(e.getClass().getCanonicalName());
         }
         return "home";
     }
 
+    @Transactional(value = "transactionManager", propagation = Propagation.REQUIRES_NEW, rollbackFor = {
+            Throwable.class })
+    @RequestMapping(value = "/updateEntityList", method = RequestMethod.POST)
+    @ResponseBody
+    public String updateEntityList(@RequestBody String json, @RequestParam("entityClass") String entityClass,
+            HttpServletRequest request) {
+        Gson gson = new Gson();
+        try {
+            List<Object> listEntities = gson.fromJson(json, new TypeToken<List<Object>>() {
+            }.getType());
+            for (Object object : listEntities) {
+                Object target = gson.fromJson(object.toString(),
+                        Class.forName("code.webdkmh.dao.entities." + entityClass));
+                entityManager.merge(target);
+            }
+        } catch (Exception e) {
+            System.out.println(e.getClass().getCanonicalName());
+        }
+        return "home";
+    }
+
+    @Transactional(value = "transactionManager", propagation = Propagation.REQUIRES_NEW, rollbackFor = {
+            Throwable.class })
+    @RequestMapping(value = "/deleteEntity", method = RequestMethod.POST)
+    @ResponseBody
+    public String deleteEntity(@RequestBody String json, @RequestParam("entityClass") String entityClass,
+            @RequestParam("entityParent") String entityParent,
+            HttpServletRequest request) {
+        Gson gson = new Gson();
+        try {
+            Object target = gson.fromJson(json, Class.forName(entityClass));
+            if (!entityClass.contains("Id")) {
+                String convertedToString = String.valueOf(target);
+                convertedToString = convertedToString.substring(convertedToString.indexOf('=') + 1,
+                        convertedToString.indexOf('}'));
+                System.out.println(convertedToString + "ok ok");
+                target = entityManager.find(Class.forName("code.webdkmh.dao.entities." + entityParent),
+                        convertedToString);
+            } else {
+
+                target = entityManager.find(Class.forName("code.webdkmh.dao.entities." + entityParent), target);
+            }
+            entityManager.remove(target);
+        } catch (Exception e) {
+            System.out.println(e.getClass().getCanonicalName());
+        }
+        return "home";
+    }
+
+    @Transactional(value = "transactionManager", propagation = Propagation.REQUIRES_NEW, rollbackFor = {
+            Throwable.class })
+    @RequestMapping(value = "/deleteEntityList", method = RequestMethod.POST)
+    @ResponseBody
+    public String deleteEntityList(@RequestBody String search, @RequestParam("entityClass") String entityClass,
+            @RequestParam("entityParent") String entityParent,
+            HttpServletRequest request) {
+        Gson gson = new Gson();
+        try {
+            List<Object> listEntities = gson.fromJson(search, new TypeToken<List<Object>>() {
+            }.getType());
+            for (Object object : listEntities) {
+                Object target;
+                if (!entityClass.contains("Id")) {
+                    String convertedToString = object.toString();
+                    convertedToString = convertedToString.substring(convertedToString.indexOf('=') + 1,
+                            convertedToString.indexOf('}'));
+                    target = entityManager.find(Class.forName("code.webdkmh.dao.entities." + entityParent),
+                            convertedToString);
+                } else {
+                    target = gson.fromJson(object.toString(),
+                            Class.forName(entityClass));
+                    target = entityManager.find(Class.forName("code.webdkmh.dao.entities." + entityParent), target);
+                }
+                entityManager.remove(target);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return "home";
+    }
 }
