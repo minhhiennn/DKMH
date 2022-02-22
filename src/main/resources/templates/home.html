@@ -12,7 +12,7 @@
 </head>
 
 <body>
-    <button onclick=modifyAll(false)>Update</button>
+    <button onclick=modifyAll(false)>Del Selected</button>
     <table class="table">
         <select th:onchange="'window.location.href = \'' + @{/} + '?entityClass=\' + this.value ' ">
             <option th:each="entityName : ${listEntitiesName}" th:text="${entityName}" th:attr="selected=${ entityClassModel == entityName ? 'selected':'false'}"></option>
@@ -32,15 +32,15 @@
                 <td> <input type="checkbox" class="foo" th:value="${iterStat.index}"></td>
                 <td th:id="${iterStat.index} + ${entityVariable}" th:if="${iterStat2.index < keySize}" th:each="entityVariable,iterStat2 : ${listEntitiesVariable}" th:text="${listEntitiesRecord.get(entityVariable).get(iterStat.index)}" type="text"></td>
                 <td th:if="${listLinkedEntity.containsKey(entityVariable) && iterStat2.index >= keySize}" th:each="entityVariable,iterStat2 : ${listEntitiesVariable}">
-                    <select th:id="${iterStat.index} + ${entityVariable}">
+                    <select th:id="${iterStat.index} + ${entityVariable}" th:onChange="|modify( ${iterStat.index}, true)|">
                         <option th:value="${listEntitiesRecord.get(entityVariable).get(iterStat.index)}" th:text="${listEntitiesRecord.get(entityVariable).get(iterStat.index)}"></option>
                         <option th:each="listLinkedEntityRecord : ${listLinkedEntity.get(entityVariable)}" th:text="${listLinkedEntityRecord}"></option>
                     </select>
                 </td>
                 <td th:if="${!listLinkedEntity.containsKey(entityVariable)  && iterStat2.index >= keySize}" th:each="entityVariable,iterStat2 : ${listEntitiesVariable}">
-                    <input th:type="${listEntityJavaType.get(entityVariable)}" th:id="${iterStat.index} + ${entityVariable}" th:value="${listEntitiesRecord.get(entityVariable).get(iterStat.index)}">
+                    <input th:onChange="|modify( ${iterStat.index}, true)|" th:type="${listEntityJavaType.get(entityVariable)}" th:id="${iterStat.index} + ${entityVariable}" th:value="${listEntitiesRecord.get(entityVariable).get(iterStat.index)}">
                 </td>
-                <td> <button th:onclick="|modify( ${iterStat.index}, true)|">Update</button></td>
+                <td> <button th:onclick="|modify( ${iterStat.index}, false)|">Delete</button></td>
             </tr>
         </tbody>
     </table>

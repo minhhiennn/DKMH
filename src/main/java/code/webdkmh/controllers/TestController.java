@@ -59,9 +59,9 @@ public class TestController {
                         listEntitiesVariable.add(entityType2.getName());
                         if (entityType2.getJavaType().getName().equals("java.util.Date")) {
                             listEntityJavaType.put(entityType2.getName(), "date");
-                        } else if (entityType2.getJavaType().getName().equals("int")) {
+                        } else if (entityType2.getJavaType().getName().equals("int")
+                                || entityType2.getJavaType().getName().equals("java.lang.Double")) {
                             listEntityJavaType.put(entityType2.getName(), "number");
-
                         } else {
                             listEntityJavaType.put(entityType2.getName(), "text");
                         }
@@ -107,7 +107,6 @@ public class TestController {
             }
 
         }
-
         List<String> listEntitiesVariableAfter = new ArrayList<String>(listEntitiesVariable);
         model.addAttribute("listEntitiesName", listEntitiesName);
         model.addAttribute("listEntitiesVariable", listEntitiesVariableAfter);
