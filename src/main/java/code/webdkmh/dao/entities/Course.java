@@ -33,7 +33,7 @@ public class Course implements Serializable {
     private String nameCourse;
 
     @Column(name = "Course_certificate", nullable = false)
-    private Byte courseCertificate;
+    private int courseCertificate;
 
     @Column(name = "years")
     private Integer years;
@@ -87,11 +87,11 @@ public class Course implements Serializable {
         return this.nameCourse;
     }
 
-    public void setCourseCertificate(Byte courseCertificate) {
+    public void setCourseCertificate(int courseCertificate) {
         this.courseCertificate = courseCertificate;
     }
 
-    public Byte getCourseCertificate() {
+    public int getCourseCertificate() {
         return this.courseCertificate;
     }
 

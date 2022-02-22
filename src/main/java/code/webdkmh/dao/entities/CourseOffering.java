@@ -33,10 +33,10 @@ public class CourseOffering implements Serializable {
     private String     clazzCode ;
 
     @Column(name="Max_Size", nullable=false)
-    private Byte       maxSize ;
+    private int       maxSize ;
 
     @Column(name="Current_Size", nullable=false)
-    private Byte       currentSize ;
+    private int       currentSize ;
 
 
     //--- ENTITY LINKS ( RELATIONSHIP )
@@ -81,17 +81,17 @@ public class CourseOffering implements Serializable {
         return this.clazzCode;
     }
 
-    public void setMaxSize( Byte maxSize ) {
+    public void setMaxSize( int maxSize ) {
         this.maxSize = maxSize ;
     }
-    public Byte getMaxSize() {
+    public int getMaxSize() {
         return this.maxSize;
     }
 
-    public void setCurrentSize( Byte currentSize ) {
+    public void setCurrentSize( int currentSize ) {
         this.currentSize = currentSize ;
     }
-    public Byte getCurrentSize() {
+    public int getCurrentSize() {
         return this.currentSize;
     }
 
