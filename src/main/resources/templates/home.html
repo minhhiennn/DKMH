@@ -37,7 +37,9 @@
                         <option th:each="listLinkedEntityRecord : ${listLinkedEntity.get(entityVariable)}" th:text="${listLinkedEntityRecord}"></option>
                     </select>
                 </td>
-                <td contenteditable th:id="${iterStat.index} + ${entityVariable}" th:if="${!listLinkedEntity.containsKey(entityVariable)  && iterStat2.index >= keySize}" th:text="${listEntitiesRecord.get(entityVariable).get(iterStat.index)}" th:each="entityVariable,iterStat2 : ${listEntitiesVariable}" type="text"></td>
+                <td th:if="${!listLinkedEntity.containsKey(entityVariable)  && iterStat2.index >= keySize}" th:each="entityVariable,iterStat2 : ${listEntitiesVariable}">
+                    <input th:type="${listEntityJavaType.get(entityVariable)}" th:id="${iterStat.index} + ${entityVariable}" th:value="${listEntitiesRecord.get(entityVariable).get(iterStat.index)}">
+                </td>
                 <td> <button th:onclick="|modify( ${iterStat.index}, true)|">Update</button></td>
             </tr>
         </tbody>
@@ -57,7 +59,7 @@
         if (isUpdate) {
             Object.keys(listRecord).forEach(function (key, index) {
                 const myElement = document.getElementById(id + key);
-                if (myElement.tagName === 'SELECT') {
+                if (myElement.tagName === 'SELECT' || myElement.tagName === 'INPUT') {
                     map1.set(key, myElement.value);
                 } else {
                     map1.set(key, myElement.textContent);
@@ -79,6 +81,7 @@
             url2 = "/deleteEntity?entityClass=" + value + "&entityParent=" + params.entityClass;
         }
         let finalJson = Object.fromEntries(map1);
+        console.log(finalJson);
         $.ajax({
             type: "POST",
             contentType: 'application/json; charset=utf-8',
@@ -109,7 +112,7 @@
             if (isUpdate) {
                 Object.keys(listRecord).forEach(function (key, index) {
                     const myElement = document.getElementById(currentIndex + key);
-                    if (myElement.tagName === 'SELECT') {
+                    if (myElement.tagName === 'SELECT' || myElement.tagName === 'INPUT') {
                         map1.set(key, myElement.value);
                     } else {
                         map1.set(key, myElement.textContent);

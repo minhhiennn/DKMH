@@ -9,10 +9,11 @@ import java.util.Set;
 
 import javax.persistence.EntityManager;
 import javax.persistence.metamodel.Attribute;
-import javax.persistence.metamodel.EntityType;
 import javax.persistence.metamodel.Attribute.PersistentAttributeType;
+import javax.persistence.metamodel.EntityType;
 import javax.servlet.http.HttpServletRequest;
 
+import com.fasterxml.jackson.databind.util.TypeKey;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
@@ -37,6 +38,7 @@ public class TestController {
         List<String> listEntitiesName = new ArrayList<>();
         List<String> listLinkedEntityClassName = new ArrayList<>();
         Map<String, List<Object>> listLinkedEntity = new HashMap<>();
+        Map<String, String> listEntityJavaType = new HashMap<>();
         LinkedHashSet<String> listEntitiesVariable = new LinkedHashSet<>();
         Map<String, List<Object>> map = new HashMap<>();
         int keyCount = 0;
@@ -55,7 +57,14 @@ public class TestController {
                 for (Attribute<?, ?> entityType2 : entityType.getAttributes()) {
                     if (!entityType2.isAssociation()) {
                         listEntitiesVariable.add(entityType2.getName());
-                        System.out.println(entityType2.getJavaType().getName());
+                        if (entityType2.getJavaType().getName().equals("java.util.Date")) {
+                            listEntityJavaType.put(entityType2.getName(), "date");
+                        } else if (entityType2.getJavaType().getName().equals("int")) {
+                            listEntityJavaType.put(entityType2.getName(), "number");
+
+                        } else {
+                            listEntityJavaType.put(entityType2.getName(), "text");
+                        }
                         List<Object> listEntitiesRecord = new ArrayList<>();
                         for (Object entityType3 : entityManager
                                 .createQuery("Select t." + entityType2.getName() + " from "
@@ -98,10 +107,12 @@ public class TestController {
             }
 
         }
+
         List<String> listEntitiesVariableAfter = new ArrayList<String>(listEntitiesVariable);
         model.addAttribute("listEntitiesName", listEntitiesName);
         model.addAttribute("listEntitiesVariable", listEntitiesVariableAfter);
         model.addAttribute("entityClassModel", entityClass);
+        model.addAttribute("listEntityJavaType", listEntityJavaType);
         model.addAttribute("listLinkedEntity", listLinkedEntity);
         model.addAttribute("keySize", keyCount);
         model.addAttribute("listEntitiesRecord", map);
@@ -156,7 +167,6 @@ public class TestController {
                 String convertedToString = String.valueOf(target);
                 convertedToString = convertedToString.substring(convertedToString.indexOf('=') + 1,
                         convertedToString.indexOf('}'));
-                System.out.println(convertedToString + "ok ok");
                 target = entityManager.find(Class.forName("code.webdkmh.dao.entities." + entityParent),
                         convertedToString);
             } else {
