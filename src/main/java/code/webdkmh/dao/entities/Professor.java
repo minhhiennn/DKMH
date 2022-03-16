@@ -11,6 +11,7 @@ import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.IdClass;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
@@ -26,111 +27,114 @@ import javax.persistence.TemporalType;
  *
  */
 @Entity
-@Table(name="Professor", schema="dbo", catalog="Course_Registration" )
+@Table(name = "Professor", schema = "dbo", catalog = "Course_Registration")
 public class Professor implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    //--- ENTITY PRIMARY KEY 
+    // --- ENTITY PRIMARY KEY
     @Id
-    @Column(name="ID_Professor", nullable=false, length=50)
-    private String     idProfessor ;
+    @Column(name = "ID_Professor", nullable = false, length = 50)
+    private String idProfessor;
 
-    //--- ENTITY DATA FIELDS 
-    @Column(name="Professor_Name", nullable=false, length=50)
-    private String     professorName ;
+    // --- ENTITY DATA FIELDS
+    @Column(name = "Professor_Name", nullable = false, length = 50)
+    private String professorName;
 
-    @Column(name="ID_Faculty", nullable=false, length=50)
-    private String     idFaculty ;
+    @Column(name = "ID_Faculty", nullable = false, length = 50)
+    private String idFaculty;
 
     @Temporal(TemporalType.DATE)
-    @Column(name="Create_date", nullable=false)
-    private Date       createDate ;
+    @Column(name = "Create_date", nullable = false)
+    private Date createDate;
 
-    @Column(name="Degree", length=50)
-    private String     degree ;
+    @Column(name = "Degree", length = 50)
+    private String degree;
 
-
-    //--- ENTITY LINKS ( RELATIONSHIP )
+    // --- ENTITY LINKS ( RELATIONSHIP )
     @OneToOne
-    @JoinColumn(name="ID_Professor", referencedColumnName="ID_User", insertable=false, updatable=false)
-    private Users      users ; 
+    @JoinColumn(name = "ID_Professor", referencedColumnName = "ID_User", insertable = false, updatable = false)
+    private Users users;
 
-    @OneToMany(mappedBy="professor")
-    private List<Schedule> listOfSchedule ; 
+    @OneToMany(mappedBy = "professor")
+    private List<Schedule> listOfSchedule;
 
-    @OneToMany(mappedBy="professor")
-    private List<ProfessorSchedule> listOfProfessorSchedule ; 
+    @OneToMany(mappedBy = "professor")
+    private List<ProfessorSchedule> listOfProfessorSchedule;
 
     @ManyToOne
-    @JoinColumn(name="ID_Faculty", referencedColumnName="ID_Faculty", insertable=false, updatable=false)
-    private Faculty    faculty ; 
-
+    @JoinColumn(name = "ID_Faculty", referencedColumnName = "ID_Faculty", insertable = false, updatable = false)
+    private Faculty faculty;
 
     /**
      * Constructor
      */
     public Professor() {
-		super();
+        super();
     }
-    
-    //--- GETTERS & SETTERS FOR FIELDS
-    public void setIdProfessor( String idProfessor ) {
-        this.idProfessor = idProfessor ;
+
+    // --- GETTERS & SETTERS FOR FIELDS
+    public void setIdProfessor(String idProfessor) {
+        this.idProfessor = idProfessor;
     }
+
     public String getIdProfessor() {
         return this.idProfessor;
     }
 
-    public void setProfessorName( String professorName ) {
-        this.professorName = professorName ;
+    public void setProfessorName(String professorName) {
+        this.professorName = professorName;
     }
+
     public String getProfessorName() {
         return this.professorName;
     }
 
-    public void setIdFaculty( String idFaculty ) {
-        this.idFaculty = idFaculty ;
+    public void setIdFaculty(String idFaculty) {
+        this.idFaculty = idFaculty;
     }
+
     public String getIdFaculty() {
         return this.idFaculty;
     }
 
-    public void setCreateDate(Date createDate ) {
-        this.createDate = createDate ;
+    public void setCreateDate(Date createDate) {
+        this.createDate = createDate;
     }
+
     public Date getCreateDate() {
         return this.createDate;
     }
 
-    public void setDegree( String degree ) {
-        this.degree = degree ;
+    public void setDegree(String degree) {
+        this.degree = degree;
     }
+
     public String getDegree() {
         return this.degree;
     }
 
-    //--- GETTERS FOR LINKS
+    // --- GETTERS FOR LINKS
     public Users getUsers() {
         return this.users;
-    } 
+    }
 
     public List<Schedule> getListOfSchedule() {
         return this.listOfSchedule;
-    } 
+    }
 
     public List<ProfessorSchedule> getListOfProfessorSchedule() {
         return this.listOfProfessorSchedule;
-    } 
+    }
 
     public Faculty getFaculty() {
         return this.faculty;
-    } 
+    }
 
-    //--- toString specific method
-	@Override
-    public String toString() { 
-        StringBuilder sb = new StringBuilder(); 
+    // --- toString specific method
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
         sb.append(idProfessor);
         sb.append("|");
         sb.append(professorName);
@@ -140,7 +144,7 @@ public class Professor implements Serializable {
         sb.append(createDate);
         sb.append("|");
         sb.append(degree);
-        return sb.toString(); 
-    } 
+        return sb.toString();
+    }
 
 }

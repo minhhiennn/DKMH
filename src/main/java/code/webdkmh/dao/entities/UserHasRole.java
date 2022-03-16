@@ -14,70 +14,70 @@ import javax.persistence.*;
  *
  */
 @Entity
-@Table(name="USER_has_role", schema="dbo", catalog="Course_Registration" )
+@Table(name = "USER_has_role", schema = "dbo", catalog = "Course_Registration")
 public class UserHasRole implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    //--- ENTITY PRIMARY KEY 
+    // --- ENTITY PRIMARY KEY
     @Id
-    @Column(name="ID_User", nullable=false, length=50)
-    private String     idUser ;
+    @Column(name = "ID_User", nullable = false, length = 50)
+    private String idUser;
 
-    //--- ENTITY DATA FIELDS 
-    @Column(name="ID_User_Kind", nullable=false, length=2)
-    private String     idUserKind ;
+    // --- ENTITY DATA FIELDS
+    @Column(name = "ID_User_Kind", nullable = false, length = 2)
+    private String idUserKind;
 
-
-    //--- ENTITY LINKS ( RELATIONSHIP )
+    // --- ENTITY LINKS ( RELATIONSHIP )
     @ManyToOne
-    @JoinColumn(name="ID_User_Kind", referencedColumnName="ID_User_Kind", insertable=false, updatable=false)
-    private UserKind   userKind ; 
+    @JoinColumn(name = "ID_User_Kind", referencedColumnName = "ID_User_Kind", insertable = false, updatable = false)
+    private UserKind userKind;
 
     @OneToOne
-    @JoinColumn(name="ID_User", referencedColumnName="ID_User", insertable=false, updatable=false)
-    private Users      users ; 
-
+    @JoinColumn(name = "ID_User", referencedColumnName = "ID_User", insertable = false, updatable = false)
+    private Users users;
 
     /**
      * Constructor
      */
     public UserHasRole() {
-		super();
+        super();
     }
-    
-    //--- GETTERS & SETTERS FOR FIELDS
-    public void setIdUser( String idUser ) {
-        this.idUser = idUser ;
+
+    // --- GETTERS & SETTERS FOR FIELDS
+    public void setIdUser(String idUser) {
+        this.idUser = idUser;
     }
+
     public String getIdUser() {
         return this.idUser;
     }
 
-    public void setIdUserKind( String idUserKind ) {
-        this.idUserKind = idUserKind ;
+    public void setIdUserKind(String idUserKind) {
+        this.idUserKind = idUserKind;
     }
+
     public String getIdUserKind() {
         return this.idUserKind;
     }
 
-    //--- GETTERS FOR LINKS
+    // --- GETTERS FOR LINKS
     public UserKind getUserKind() {
         return this.userKind;
-    } 
+    }
 
     public Users getUsers() {
         return this.users;
-    } 
+    }
 
-    //--- toString specific method
-	@Override
-    public String toString() { 
-        StringBuilder sb = new StringBuilder(); 
+    // --- toString specific method
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
         sb.append(idUser);
         sb.append("|");
         sb.append(idUserKind);
-        return sb.toString(); 
-    } 
+        return sb.toString();
+    }
 
 }

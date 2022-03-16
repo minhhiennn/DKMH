@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <meta charset="UTF-8">
+    <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+</head>
+
+<body>
+    <button onclick=modifyAll(false)>Del Selected</button>
+    <table class="table">
+        <select th:onchange="'window.location.href = \'' + @{/} + '?entityClass=\' + this.value ' ">
+            <option th:each="entityName : ${listEntitiesName}" th:text="${entityName}" th:attr="selected=${ entityClassModel == entityName ? 'selected':'false'}"></option>
+        </select>
+
+        <thead>
+            <tr>
+                <th>Number</th>
+                <th th:if="${iterStat2.index < keySize}" th:each="entityVariable,iterStat2 : ${listEntitiesVariable}" value="${entityVariable}" th:text="${entityVariable}" scope="col"></th>
+                <th th:if="${listLinkedEntity.containsKey(entityVariable) && iterStat2.index >= keySize}" th:each="entityVariable,iterStat2 : ${listEntitiesVariable}" value="${entityVariable}" th:text="${entityVariable}" scope="col"></th>
+                <th th:if="${!listLinkedEntity.containsKey(entityVariable)  && iterStat2.index >= keySize}" th:each="entityVariable,iterStat2 : ${listEntitiesVariable}" value="${entityVariable}" th:text="${entityVariable}" scope="col"></th>
+                <th>Button</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="entityRecord,iterStat  : ${listEntitiesRecord.get(listEntitiesVariable.get(0))}">
+                <td> <input type="checkbox" class="foo" th:value="${iterStat.index}"></td>
+                <td th:id="${iterStat.index} + ${entityVariable}" th:if="${iterStat2.index < keySize}" th:each="entityVariable,iterStat2 : ${listEntitiesVariable}" th:text="${listEntitiesRecord.get(entityVariable).get(iterStat.index)}" type="text"></td>
+                <td th:if="${listLinkedEntity.containsKey(entityVariable) && iterStat2.index >= keySize}" th:each="entityVariable,iterStat2 : ${listEntitiesVariable}">
+                    <select th:id="${iterStat.index} + ${entityVariable}" th:onChange="|modify( ${iterStat.index}, true)|">
+                        <option th:value="${listEntitiesRecord.get(entityVariable).get(iterStat.index)}" th:text="${listEntitiesRecord.get(entityVariable).get(iterStat.index)}"></option>
+                        <option th:each="listLinkedEntityRecord : ${listLinkedEntity.get(entityVariable)}" th:text="${listLinkedEntityRecord}"></option>
+                    </select>
+                </td>
+                <td th:if="${!listLinkedEntity.containsKey(entityVariable)  && iterStat2.index >= keySize}" th:each="entityVariable,iterStat2 : ${listEntitiesVariable}">
+                    <input th:onChange="|modify( ${iterStat.index}, true)|" th:type="${listEntityJavaType.get(entityVariable)}" th:id="${iterStat.index} + ${entityVariable}" th:value="${listEntitiesRecord.get(entityVariable).get(iterStat.index)}">
+                </td>
+                <td> <button th:onclick="|modify( ${iterStat.index}, false)|">Delete</button></td>
+            </tr>
+        </tbody>
+    </table>
+</body>
+<script th:inline="javascript">
+    function modify(id, isUpdate) {
+        /*<![CDATA[*/
+        let params = new Proxy(new URLSearchParams(window.location.search), {
+            get: (searchParams, prop) => searchParams.get(prop),
+        });
+        let value = params.entityClass; // "some_value"
+        let url2 = "/updateEntity?entityClass=" + value;
+        let keySize = /*[[${keySize}]]*/+"";
+        let listRecord = /*[[${listEntitiesRecord}]]*/[];
+        let map1 = new Map();
+        if (isUpdate) {
+            Object.keys(listRecord).forEach(function (key, index) {
+                const myElement = document.getElementById(id + key);
+                if (myElement.tagName === 'SELECT' || myElement.tagName === 'INPUT') {
+                    map1.set(key, myElement.value);
+                } else {
+                    map1.set(key, myElement.textContent);
+                }
+            });
+        } else {
+            /*[# th:each="entityVariable,iterStat : ${listEntitiesVariable}"]*/
+            var entityVariable = /*[[${entityVariable}]]*/"";
+            var iterStat = /*[[${iterStat.index}]]*/"";
+            if (iterStat < keySize) {
+                map1.set(entityVariable, listRecord[entityVariable][id]);
+            }
+            /*[/]*/
+            if (keySize == 1) {
+                value = "java.lang.Object"
+            } else {
+                value = "code.webdkmh.dao.entities." + params.entityClass + "Id"
+            }
+            url2 = "/deleteEntity?entityClass=" + value + "&entityParent=" + params.entityClass;
+        }
+        let finalJson = Object.fromEntries(map1);
+        console.log(finalJson);
+        $.ajax({
+            type: "POST",
+            contentType: 'application/json; charset=utf-8',
+            dataType: 'json',
+            url: url2,
+            data: JSON.stringify(finalJson),
+            success: function (finalJson) {
+                alert("ok")
+            }
+        });
+        /*]]>*/
+    }
+
+    function modifyAll(isUpdate) {
+        /*<![CDATA[*/
+        const data = [...document.querySelectorAll('.foo:checked')].map(e => e.value);
+        let listOfObjects = [];
+        let params = new Proxy(new URLSearchParams(window.location.search), {
+            get: (searchParams, prop) => searchParams.get(prop),
+        });
+        let keySize = /*[[${keySize}]]*/+"";
+        let value = params.entityClass; // "some_value"
+        let url2 = "/updateEntityList?entityClass=" + value;
+        let listRecord = /*[[${listEntitiesRecord}]]*/[];
+        for (let index = 0; index < data.length; index++) {
+            let currentIndex = data[index];
+            let map1 = new Map();
+            if (isUpdate) {
+                Object.keys(listRecord).forEach(function (key, index) {
+                    const myElement = document.getElementById(currentIndex + key);
+                    if (myElement.tagName === 'SELECT' || myElement.tagName === 'INPUT') {
+                        map1.set(key, myElement.value);
+                    } else {
+                        map1.set(key, myElement.textContent);
+                    }
+                });
+            } else {
+                /*[# th:each="entityVariable,iterStat : ${listEntitiesVariable}"]*/
+                var entityVariable = /*[[${entityVariable}]]*/"";
+                var iterStat = /*[[${iterStat.index}]]*/"";
+                if (iterStat < keySize) {
+                    map1.set(entityVariable, listRecord[entityVariable][currentIndex]);
+                }
+                /*[/]*/
+                if (keySize == 1) {
+                    value = "java.lang.String"
+                } else {
+                    value = "code.webdkmh.dao.entities." + params.entityClass + "Id"
+                }
+                url2 = "/deleteEntityList?entityClass=" + value + "&entityParent=" + params.entityClass;
+            }
+            listOfObjects.push(Object.fromEntries(map1));
+        }
+        $.ajax({
+            type: "POST",
+            contentType: 'application/json; charset=utf-8',
+            dataType: 'json',
+            url: url2,
+            data: JSON.stringify(listOfObjects),
+            success: function (result) {
+                alert("ok")
+            }
+        });
+        /*]]>*/
+    }
+
+</script>
+
+</html>

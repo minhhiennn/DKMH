@@ -40,7 +40,7 @@ public class Schedule implements Serializable {
     private String idCourseOffering;
 
     @Column(name = "Id_Profeesor", length = 50)
-    private String idProfeesor;
+    private String idProfessor;
 
     @Column(name = "Theoretical", nullable = false, length = 2)
     private String theoretical;
@@ -60,10 +60,10 @@ public class Schedule implements Serializable {
     private String studyPlace;
 
     @Column(name = "Start_Slot", nullable = false)
-    private Byte startSlot;
+    private int startSlot;
 
     @Column(name = "End_Slot", nullable = false)
-    private Byte endSlot;
+    private int endSlot;
 
     // --- ENTITY LINKS ( RELATIONSHIP )
     @OneToMany(mappedBy = "schedule")
@@ -107,12 +107,12 @@ public class Schedule implements Serializable {
         return this.idCourseOffering;
     }
 
-    public void setIdProfeesor(String idProfeesor) {
-        this.idProfeesor = idProfeesor;
+    public void setidProfessor(String idProfessor) {
+        this.idProfessor = idProfessor;
     }
 
-    public String getIdProfeesor() {
-        return this.idProfeesor;
+    public String getidProfessor() {
+        return this.idProfessor;
     }
 
     public void setTheoretical(String theoretical) {
@@ -155,19 +155,19 @@ public class Schedule implements Serializable {
         return this.studyPlace;
     }
 
-    public void setStartSlot(Byte startSlot) {
+    public void setStartSlot(int startSlot) {
         this.startSlot = startSlot;
     }
 
-    public Byte getStartSlot() {
+    public int getStartSlot() {
         return this.startSlot;
     }
 
-    public void setEndSlot(Byte endSlot) {
+    public void setEndSlot(int endSlot) {
         this.endSlot = endSlot;
     }
 
-    public Byte getEndSlot() {
+    public int getEndSlot() {
         return this.endSlot;
     }
 
@@ -200,7 +200,7 @@ public class Schedule implements Serializable {
         sb.append("|");
         sb.append(idCourseOffering);
         sb.append("|");
-        sb.append(idProfeesor);
+        sb.append(idProfessor);
         sb.append("|");
         sb.append(theoretical);
         sb.append("|");
